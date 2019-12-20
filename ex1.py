@@ -13,9 +13,11 @@ def calculate_degree(matrix):
     d = A.flat
     diagMat = list(d)
 
-    print("\nCalculate degree for non-directed graph:\n\n", np.diag(degree - diagMat))
+    print("\nCalculate number of degrees for directed graph:\n\n", np.diag(degree - diagMat))
 
-    print("\nCalculate degree for directed graph:\n\n", np.diag(sum_col - diagMat))
+    print("\nCalculate number of degrees for non-directed graph:\n\n", np.diag(sum_col - diagMat))
+
+    return np.diag(sum_col - diagMat)
 
 def check_DFS(matrix, j, visited):
     
@@ -45,13 +47,18 @@ def check_connected(matrix, vertices):
     return True
 
 def check_euler_circuit(matrix, vertices):
-    if check_connected(matrix, vertices) == False:
-        return 0
-    else:
+    # if check_connected(matrix, vertices) == False:
+    #     return 0
+    # else:
         odd = 0
         for i in range(vertices):
-            if (len(matrix[i] % 2) != 0):
-                odd += 1
+            for j in range(vertices):
+                if (matrix[i][j] != 0):
+                    print("\nVertice: ", i)
+                    print("Check number of degree: ", matrix[i][j])
+                if ((matrix[i][j] % 2) != 0):
+                    odd += 1
+            print("-> Number of odd values: ", odd)
         
         if odd == 0:
             return 2
@@ -61,6 +68,7 @@ def check_euler_circuit(matrix, vertices):
             return 0
 
 def check(matrix, vertices):
+    print("\n\n---------checking---------")
     result = check_euler_circuit(matrix, vertices)
     if result == 0:
         print("you get nothing, good day sir!")
@@ -89,13 +97,14 @@ def check(matrix, vertices):
 #                 visited[i] = True
 
 #     return False
-
-input_matrix = np.loadtxt('./example.txt', dtype=int, usecols=range(10))
+input_file = input("Enter file name: ")
+input_matrix = np.loadtxt(input_file, dtype=int)
 print("Input matrix:\n\n", input_matrix)
 
-calculate_degree(input_matrix)
+check_matrix = calculate_degree(input_matrix)
+print("\nmatrix for checking: \n\n", check_matrix)
 
-check(input_matrix, len(input_matrix))
+check(check_matrix, len(input_matrix))
 
 # x = int(input("Enter starting point: "))
 # y = int(input("Enter ending point: "))
